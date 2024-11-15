@@ -9,13 +9,15 @@ import com.abdelrahman.shared_presentation.viewmodel.State
 
 class CharactersListContract {
     data class CharactersUIState(
-        val loadingTypes: com.abdelrahman.shared_presentation.LoadingTypes = com.abdelrahman.shared_presentation.LoadingTypes.NONE,
+        val loadingTypes: LoadingTypes = LoadingTypes.NONE,
         val charactersModel: CharactersModel? = null,
-        val errorModel: ErrorModel? = null
+        val errorModel: ErrorModel? = null,
+        val currentPage: Int = 0
     ) : State
 
     sealed class CharacterEvents : Event {
-        data class GetCharacters(val loadingTypes: com.abdelrahman.shared_presentation.LoadingTypes) : CharacterEvents()
+        data class GetCharacters(val loadingTypes: LoadingTypes) :
+            CharacterEvents()
     }
 
     sealed class CharactersSingleActions : SingleUIEvent

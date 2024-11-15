@@ -1,8 +1,12 @@
 package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.feature_characters_domain.usecase.getcharacters.IGetCharactersUseCase
 import com.abdelrahman.shared_domain.models.DataState
+import com.abdelrahman.shared_domain.models.ErrorModel
+import com.abdelrahman.shared_presentation.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onStart
@@ -19,7 +23,7 @@ class CharactersViewModel @Inject constructor(
     }
 
     init {
-        sendEvent(CharactersListContract.CharacterEvents.GetCharacters(com.abdelrahman.shared_presentation.LoadingTypes.NORMAL_PROGRESS))
+        sendEvent(CharactersListContract.CharacterEvents.GetCharacters(LoadingTypes.NORMAL_PROGRESS))
     }
 
     override fun onEvent(event: CharactersListContract.CharacterEvents) {
@@ -28,37 +32,74 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-    private fun callGetCharacters(loadingTypes: com.abdelrahman.shared_presentation.LoadingTypes) {
+    private fun updateCurrentPage(page: Int) {
+        setState {
+            copy(
+                currentPage = page)
+        }
+    }
+
+    private fun updateNextLoadingPage() {
+        if (currentState.currentPage < (currentState.charactersModel?.totalPages ?: 0))
+            when (currentState.loadingTypes) {
+                LoadingTypes.PAGING_PROGRESS -> updateCurrentPage(
+                    currentState.currentPage + 1
+                )
+
+                LoadingTypes.PULL_TO_REFRESH, LoadingTypes.NORMAL_PROGRESS -> updateCurrentPage(
+                    0
+                )
+
+                LoadingTypes.NONE -> updateCurrentPage(currentState.currentPage)
+            }
+    }
+
+    private fun callGetCharacters(loadingTypes: LoadingTypes) {
         viewModelScope.launch {
-            iGetCharactersUseCase(1, null, 20).onStart {
-                setState {
-                    copy(
-                        loadingTypes = loadingTypes
-                    )
-                }
-            }.collect { result ->
+            setState {
+                copy(
+                    loadingTypes=loadingTypes
+                )
+            }
+            updateNextLoadingPage()
+            iGetCharactersUseCase(currentState.currentPage, null, 20).collect { result ->
                 when (result) {
-                    is DataState.Success -> setState {
-                        copy(
-                            charactersModel = result.data,
-                            loadingTypes = com.abdelrahman.shared_presentation.LoadingTypes.NONE
-                        )
-                    }
-
-                    else -> {
-                        val resultError = result as DataState.Error
-                        setState {
-                            copy(
-                                errorModel = resultError.errorModel,
-                                loadingTypes = com.abdelrahman.shared_presentation.LoadingTypes.NONE
-                            )
-                        }
-                    }
+                    is DataState.Error -> onError(result.errorModel)
+                    is DataState.Success -> onSuccess(result.data)
                 }
-
             }
         }
     }
 
+    private fun onSuccess(data: CharactersModel?) {
+        val currentLoading = currentState.loadingTypes
+        if (currentLoading == LoadingTypes.NORMAL_PROGRESS || currentLoading == LoadingTypes.PULL_TO_REFRESH) {
+            setState {
+                copy(
+                    charactersModel = data,
+                    loadingTypes = LoadingTypes.NONE
+                )
+            }
+        } else if (currentLoading == LoadingTypes.PAGING_PROGRESS) {
+            setState {
+                copy(
+                    charactersModel = charactersModel?.copy(
+                        characters = charactersModel.characters?.apply {
+                            addAll(data?.characters ?: arrayListOf())
+                        }
+                    ),
+                    loadingTypes = LoadingTypes.NONE
+                )
+            }
+        }
+    }
 
+    private fun onError(errorModel: ErrorModel?) {
+        setState {
+            copy(
+                loadingTypes = LoadingTypes.NONE,
+                errorModel = errorModel
+            )
+        }
+    }
 }

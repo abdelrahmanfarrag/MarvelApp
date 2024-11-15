@@ -11,5 +11,5 @@ data class Thumbnail(
 )
 
 fun Thumbnail.createValidThumbnailURL(): String? {
-    return path?.plus("landscape_incredible")?.plus(extension)
+    return path?.plus("/landscape_incredible.")?.plus(extension)
 }
