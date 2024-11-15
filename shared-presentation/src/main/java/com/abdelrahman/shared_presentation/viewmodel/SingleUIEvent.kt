@@ -1,0 +1,3 @@
+package com.abdelrahman.shared_presentation.viewmodel
+
+interface SingleUIEvent
