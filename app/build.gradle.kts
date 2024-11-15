@@ -63,6 +63,6 @@ dependencies {
     implementation(projects.featureCharacters.featureCharactersPresentation)
     implementation(projects.api)
     implementation(projects.shared.sharedDomain)
-    implementation(projects.sharedPresentation)
+    implementation(projects.shared.sharedPresentation)
     kapt(libs.hiltCompiler)
 }

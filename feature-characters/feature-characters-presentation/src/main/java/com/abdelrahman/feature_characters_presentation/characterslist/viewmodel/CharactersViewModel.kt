@@ -3,7 +3,6 @@ package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.abdelrahman.feature_characters_domain.usecase.getcharacters.IGetCharactersUseCase
 import com.abdelrahman.shared_domain.models.DataState
-import com.abdelrahman.shared_presentation.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onStart
@@ -20,7 +19,7 @@ class CharactersViewModel @Inject constructor(
     }
 
     init {
-        sendEvent(CharactersListContract.CharacterEvents.GetCharacters(LoadingTypes.NORMAL_PROGRESS))
+        sendEvent(CharactersListContract.CharacterEvents.GetCharacters(com.abdelrahman.shared_presentation.LoadingTypes.NORMAL_PROGRESS))
     }
 
     override fun onEvent(event: CharactersListContract.CharacterEvents) {
@@ -29,7 +28,7 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-    private fun callGetCharacters(loadingTypes: LoadingTypes) {
+    private fun callGetCharacters(loadingTypes: com.abdelrahman.shared_presentation.LoadingTypes) {
         viewModelScope.launch {
             iGetCharactersUseCase(1, null, 20).onStart {
                 setState {
@@ -42,7 +41,7 @@ class CharactersViewModel @Inject constructor(
                     is DataState.Success -> setState {
                         copy(
                             charactersModel = result.data,
-                            loadingTypes = LoadingTypes.NONE
+                            loadingTypes = com.abdelrahman.shared_presentation.LoadingTypes.NONE
                         )
                     }
 
@@ -51,7 +50,7 @@ class CharactersViewModel @Inject constructor(
                         setState {
                             copy(
                                 errorModel = resultError.errorModel,
-                                loadingTypes = LoadingTypes.NONE
+                                loadingTypes = com.abdelrahman.shared_presentation.LoadingTypes.NONE
                             )
                         }
                     }

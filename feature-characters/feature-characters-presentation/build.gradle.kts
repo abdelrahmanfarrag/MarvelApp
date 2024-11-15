@@ -38,6 +38,6 @@ dependencies {
     implementation(libs.bundles.presentation.bundle)
     implementation(projects.featureCharacters.featureCharactersDomain)
     implementation(projects.shared.sharedDomain)
-    implementation(projects.sharedPresentation)
+    implementation(projects.shared.sharedPresentation)
     kapt(libs.hiltCompiler)
 }
