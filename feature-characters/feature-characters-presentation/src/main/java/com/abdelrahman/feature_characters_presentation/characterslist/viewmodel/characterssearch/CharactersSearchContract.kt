@@ -1,0 +1,4 @@
+package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterssearch
+
+class CharactersSearchContract {
+}

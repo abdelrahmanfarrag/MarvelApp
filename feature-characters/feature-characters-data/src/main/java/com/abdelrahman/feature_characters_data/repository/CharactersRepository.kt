@@ -4,8 +4,10 @@ import com.abdelrahman.api.mappers.mapToDataState
 import com.abdelrahman.feature_characters_data.models.GetCharactersRequest
 import com.abdelrahman.feature_characters_data.models.createValidThumbnailURL
 import com.abdelrahman.feature_characters_data.remotedatasource.ICharactersRemoteDataSource
+import com.abdelrahman.feature_characters_data.utils.ImageSpecs
 import com.abdelrahman.feature_characters_domain.models.Character
 import com.abdelrahman.feature_characters_domain.models.CharactersModel
+import com.abdelrahman.feature_characters_domain.models.Image
 import com.abdelrahman.feature_characters_domain.repository.ICharactersRepository
 import com.abdelrahman.shared_domain.models.DataState
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +36,11 @@ class CharactersRepository @Inject constructor(private val iCharactersRemoteData
                         name = response.name,
                         description = response.description,
                         modifiedDate = response.modified,
-                        imageURL = response.thumbnail?.createValidThumbnailURL()
+                        image = Image(
+                            landscapeImage = response.thumbnail?.createValidThumbnailURL(ImageSpecs.LANDSCAPE_INCREDIBLE),
+                            squareImage = response.thumbnail?.createValidThumbnailURL(ImageSpecs.STANDARD_AMAZING),
+                            portraitImage = response.thumbnail?.createValidThumbnailURL(ImageSpecs.PORTRAIT_INCREDIBLE)
+                        ),
                     )
                 } as ArrayList<Character>)
 

@@ -5,5 +5,5 @@ data class Character(
     val name:String?,
     val description:String?,
     val modifiedDate:String?,
-    val imageURL :String?
+    val image :Image?
 )

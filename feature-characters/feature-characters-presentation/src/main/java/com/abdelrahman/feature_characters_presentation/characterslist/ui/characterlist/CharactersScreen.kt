@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.abdelrahman.feature_characters_presentation.characterslist.ui
+package com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,7 +28,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.abdelrahman.feature_characters_domain.models.Character
-import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.CharactersListContract
+import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist.CharactersListContract
+import com.abdelrahman.shared_domain.R
 import com.abdelrahman.shared_presentation.LoadingTypes
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -82,7 +83,7 @@ fun CharactersScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(color = colorResource(id = com.abdelrahman.shared_domain.R.color.black))
+                        .background(color = colorResource(id = R.color.black))
                 )
                 LazyColumn(
                     modifier = Modifier
@@ -124,6 +125,6 @@ private fun Preview_CharactersScreen() {
     CharactersScreen(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = com.abdelrahman.shared_domain.R.color.black))
+            .background(color = colorResource(id = R.color.black))
     )
 }

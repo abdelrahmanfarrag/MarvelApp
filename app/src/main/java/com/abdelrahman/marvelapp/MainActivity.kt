@@ -1,7 +1,6 @@
 package com.abdelrahman.marvelapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -19,8 +18,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.abdelrahman.feature_characters_presentation.characterslist.ui.CharactersScreen
-import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.CharactersViewModel
+import com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist.CharactersScreen
+import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist.CharactersViewModel
 import com.abdelrahman.marvelapp.navigation.CharactersScreen
 import com.abdelrahman.marvelapp.ui.theme.MarvelAppTheme
 import dagger.hilt.android.AndroidEntryPoint

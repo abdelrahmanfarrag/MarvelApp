@@ -1,4 +1,4 @@
-package com.abdelrahman.feature_characters_presentation.characterslist.ui
+package com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

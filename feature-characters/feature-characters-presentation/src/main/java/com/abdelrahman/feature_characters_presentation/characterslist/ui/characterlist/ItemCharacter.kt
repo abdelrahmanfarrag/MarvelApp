@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalGlideComposeApi::class)
 
-package com.abdelrahman.feature_characters_presentation.characterslist.ui
+package com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,9 +36,9 @@ fun ItemCharacter(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(dimensionResource(id = com.abdelrahman.shared_domain.R.dimen.characterHeight)),
-            model = character.imageURL,
+            model = character.image?.landscapeImage,
             contentScale = ContentScale.FillBounds,
-            contentDescription = character.imageURL
+            contentDescription = character.image?.landscapeImage
         )
         Box(
             modifier = Modifier

@@ -1,6 +1,5 @@
-package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel
+package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.feature_characters_domain.usecase.getcharacters.IGetCharactersUseCase
@@ -9,7 +8,6 @@ import com.abdelrahman.shared_domain.models.ErrorModel
 import com.abdelrahman.shared_presentation.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +33,8 @@ class CharactersViewModel @Inject constructor(
     private fun updateCurrentPage(page: Int) {
         setState {
             copy(
-                currentPage = page)
+                currentPage = page
+            )
         }
     }
 
@@ -58,7 +57,7 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             setState {
                 copy(
-                    loadingTypes=loadingTypes
+                    loadingTypes = loadingTypes
                 )
             }
             updateNextLoadingPage()
