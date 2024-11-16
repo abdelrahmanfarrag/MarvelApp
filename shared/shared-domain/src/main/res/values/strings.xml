@@ -11,4 +11,7 @@
     <string name="details">Details</string>
     <string name="wiki">Wiki</string>
     <string name="comic_link">Comiclink</string>
+    <string name="name">NAME</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="related_links">RELATED LINKS</string>
 </resources>

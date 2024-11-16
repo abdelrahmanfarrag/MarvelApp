@@ -21,10 +21,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.abdelrahman.feature_character_details_presentation.models.CharacterDetailsArgument
 import com.abdelrahman.feature_character_details_presentation.ui.CharacterDetailsScreen
-import com.abdelrahman.feature_character_details_presentation.viewmodel.CharacterDetailsContract
 import com.abdelrahman.feature_character_details_presentation.viewmodel.CharacterDetailsViewModel
 import com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist.CharactersScreen
 import com.abdelrahman.feature_characters_presentation.characterslist.ui.charactersearch.SearchScreen
@@ -35,7 +33,6 @@ import com.abdelrahman.marvelapp.navigation.CharacterDetailsScreen
 import com.abdelrahman.marvelapp.navigation.CharactersScreen
 import com.abdelrahman.marvelapp.navigation.CharactersSearchScreen
 import com.abdelrahman.marvelapp.ui.theme.MarvelAppTheme
-import com.abdelrahman.shared_domain.models.ExtraData
 import com.abdelrahman.shared_domain.utils.defaultString
 import com.abdelrahman.shared_presentation.utils.toJson
 import dagger.hilt.android.AndroidEntryPoint

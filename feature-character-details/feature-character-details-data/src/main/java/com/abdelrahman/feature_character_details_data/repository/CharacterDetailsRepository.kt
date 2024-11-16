@@ -1,6 +1,5 @@
 package com.abdelrahman.feature_character_details_data.repository
 
-import android.util.Log
 import com.abdelrahman.api.mappers.mapToDataState
 import com.abdelrahman.feature_character_details_data.remotedatasource.ICharacterDetailsRemoteDataSource
 import com.abdelrahman.feature_character_domain.models.CharacterDetailsSection

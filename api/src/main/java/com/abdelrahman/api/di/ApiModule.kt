@@ -7,6 +7,7 @@ import com.abdelrahman.api.networkcheck.CheckNetworkAvailability
 import com.abdelrahman.api.networkcheck.ICheckNetworkAvailability
 import com.abdelrahman.api.retrofit.interceptors.IQueryParamsInterceptor
 import com.abdelrahman.api.retrofit.interceptors.QueryParamsInterceptor
+import com.abdelrahman.api.utils.Constants
 import com.abdelrahman.api.validateresponse.IValidateResponse
 import com.abdelrahman.api.validateresponse.ValidateResponse
 import com.google.gson.Gson
@@ -21,6 +22,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -58,6 +60,9 @@ abstract class ApiModule {
             iQueryParamsInterceptor: IQueryParamsInterceptor
         ): OkHttpClient {
             return OkHttpClient.Builder()
+                .connectTimeout(Constants.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(Constants.READ_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(Constants.WRITE_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(httpLoggingInterceptor)
                 .addInterceptor(iQueryParamsInterceptor)
                 .build()

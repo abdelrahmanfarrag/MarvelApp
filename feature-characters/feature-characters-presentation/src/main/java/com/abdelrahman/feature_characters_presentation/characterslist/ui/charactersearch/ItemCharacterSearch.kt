@@ -13,20 +13,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.abdelrahman.feature_characters_domain.models.Character
 import com.abdelrahman.shared_domain.R
 import com.abdelrahman.shared_domain.utils.defaultString
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import com.abdelrahman.shared_presentation.ui.NetworkImage
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemCharacterSearch(
     modifier: Modifier = Modifier,
     character: Character? = null
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        GlideImage(
+        NetworkImage(
             modifier = Modifier.size(dimensionResource(id = R.dimen.dimen_56)),
-            model = character?.image?.squareImage,
-            contentDescription = character?.name.defaultString()
+            imageUrl = character?.image?.portraitImage
         )
         Text(
             modifier = Modifier.padding(start = dimensionResource(id = R.dimen.dimen_8)),

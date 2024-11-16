@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalGlideComposeApi::class)
-
 package com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist
 
 import androidx.compose.foundation.background
@@ -14,46 +12,44 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import com.abdelrahman.feature_characters_domain.models.Character
+import com.abdelrahman.shared_domain.R
 import com.abdelrahman.shared_domain.utils.defaultString
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import com.abdelrahman.shared_presentation.ui.NetworkImage
 
 @Composable
 fun ItemCharacter(
     modifier: Modifier = Modifier,
-    character: Character = Character(null, null, null,
-        null, null, null, null, null, null, null)
+    character: Character = Character(
+        null, null, null,
+        null, null, null, null, null, null, null
+    )
 ) {
-
     Box(
         modifier = modifier.wrapContentSize()
     ) {
-        GlideImage(
+        NetworkImage(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(dimensionResource(id = com.abdelrahman.shared_domain.R.dimen.characterHeight)),
-            model = character.image?.landscapeImage,
-            contentScale = ContentScale.FillBounds,
-            contentDescription = character.image?.landscapeImage
+                .height(dimensionResource(id = R.dimen.characterHeight)),
+            imageUrl = character.image?.portraitImage
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(dimensionResource(id = com.abdelrahman.shared_domain.R.dimen.characterHeight))
+                .height(dimensionResource(id = R.dimen.characterHeight))
                 .background(
                     brush = Brush.linearGradient(
                         colors = arrayListOf(
                             colorResource(
-                                id = com.abdelrahman.shared_domain.R.color.black
+                                id = R.color.black
                             ).copy(
                                 alpha = 0.1f
-                            ), colorResource(id = com.abdelrahman.shared_domain.R.color.black).copy(
+                            ), colorResource(id = R.color.black).copy(
                                 alpha = 0.3f
-                            ), colorResource(id = com.abdelrahman.shared_domain.R.color.black).copy(
+                            ), colorResource(id = R.color.black).copy(
                                 alpha = 0.5f
                             )
                         )
@@ -64,21 +60,21 @@ fun ItemCharacter(
         Text(
             modifier = Modifier
                 .padding(
-                    start = dimensionResource(id = com.abdelrahman.shared_domain.R.dimen.dimen_16),
+                    start = dimensionResource(id = R.dimen.dimen_16),
                     bottom = dimensionResource(
-                        id = com.abdelrahman.shared_domain.R.dimen.dimen_16
+                        id = R.dimen.dimen_16
                     )
                 )
                 .wrapContentSize()
                 .align(Alignment.BottomStart)
                 .background(
-                    color = colorResource(id = com.abdelrahman.shared_domain.R.color.white),
+                    color = colorResource(id = R.color.white),
                     shape = RoundedCornerShape(
-                        dimensionResource(id = com.abdelrahman.shared_domain.R.dimen.dimen_4)
+                        dimensionResource(id = R.dimen.dimen_4)
                     )
                 ),
             text = character.name.defaultString(),
-            color = colorResource(id = com.abdelrahman.shared_domain.R.color.black)
+            color = colorResource(id = R.color.black)
         )
 
     }

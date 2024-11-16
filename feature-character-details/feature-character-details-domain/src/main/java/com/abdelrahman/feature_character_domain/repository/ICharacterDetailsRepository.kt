@@ -1,6 +1,5 @@
 package com.abdelrahman.feature_character_domain.repository
 
-import com.abdelrahman.feature_character_domain.models.CharacterDetails
 import com.abdelrahman.feature_character_domain.models.CharacterDetailsSection
 import com.abdelrahman.feature_character_domain.models.ContentType
 import com.abdelrahman.shared_domain.models.DataState

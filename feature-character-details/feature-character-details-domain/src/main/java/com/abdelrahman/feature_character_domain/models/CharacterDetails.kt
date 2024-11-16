@@ -1,3 +1,0 @@
-package com.abdelrahman.feature_character_domain.models
-
-data class CharacterDetails(val characterDetailsSections: CharacterDetailsSection)

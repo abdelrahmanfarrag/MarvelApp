@@ -1,11 +1,8 @@
 [versions]
 agp = "8.5.2"
-glideVersion = "1.0.0-beta01"
+coilCompose = "2.4.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 kotlinxSerializationJson = "1.6.3"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
@@ -18,14 +15,11 @@ okhttpVersion = "5.0.0-alpha.14"
 hiltComposeVersion = "1.2.0"
 navVersion = "2.8.4"
 material3Version = "1.3.1"
-gsonVersion ="2.9.0"
+gsonVersion = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glideVersion" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -45,12 +39,12 @@ okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 logginInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
 dagger-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltComposeVersion" }
 navigationCompse = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion" }
-gson = {module="com.google.code.gson:gson",version.ref="gsonVersion"}
+gson = { module = "com.google.code.gson:gson", version.ref = "gsonVersion" }
 
 [bundles]
 data-bundle = ["retrofit", "gsonConvertor", "okHttp", "logginInterceptor", "hiltAndroid"]
 domain-bundle = ["hiltAndroid"]
-presentation-bundle = ["glide", "androidx-compose-material3", "androidx-core-ktx", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "hiltAndroid", "dagger-hilt-compose", "androidx-ui-tooling", "material", "androidx-appcompat", "androidx-ui-tooling-preview"]
+presentation-bundle = ["coil-compose", "androidx-compose-material3", "androidx-core-ktx", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "hiltAndroid", "dagger-hilt-compose", "androidx-ui-tooling", "material", "androidx-appcompat", "androidx-ui-tooling-preview"]
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

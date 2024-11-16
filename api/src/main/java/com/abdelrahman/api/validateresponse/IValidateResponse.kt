@@ -4,6 +4,6 @@ import com.abdelrahman.api.models.ResponseState
 import retrofit2.Response
 
 interface IValidateResponse {
-    suspend fun <T> validateApiResponse(response: Response<T>):ResponseState<T>
+    suspend fun <T> validateApiResponse(response: Response<T>): ResponseState<T>
 
 }

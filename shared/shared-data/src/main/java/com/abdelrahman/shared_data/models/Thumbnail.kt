@@ -10,5 +10,5 @@ data class Thumbnail(
 )
 
 fun Thumbnail.createValidThumbnailURL(imageSpecs: ImageSpecs): String? {
-    return path?.plus("/${imageSpecs.spec}.")?.plus(extension)
+    return path?.plus("/${imageSpecs.spec}.")?.plus(extension)?.replace("http","https")
 }

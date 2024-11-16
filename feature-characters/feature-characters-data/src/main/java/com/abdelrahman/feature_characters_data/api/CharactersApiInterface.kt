@@ -6,7 +6,6 @@ import com.abdelrahman.feature_characters_data.utils.Constants
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
-import retrofit2.http.QueryName
 
 interface CharactersApiInterface {
 
