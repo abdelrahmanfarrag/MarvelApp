@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,15 +21,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.abdelrahman.feature_character_details_presentation.models.CharacterDetailsArgument
+import com.abdelrahman.feature_character_details_presentation.ui.CharacterDetailsScreen
+import com.abdelrahman.feature_character_details_presentation.viewmodel.CharacterDetailsContract
+import com.abdelrahman.feature_character_details_presentation.viewmodel.CharacterDetailsViewModel
 import com.abdelrahman.feature_characters_presentation.characterslist.ui.characterlist.CharactersScreen
 import com.abdelrahman.feature_characters_presentation.characterslist.ui.charactersearch.SearchScreen
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist.CharactersListContract
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist.CharactersViewModel
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterssearch.CharactersSearchViewModel
+import com.abdelrahman.marvelapp.navigation.CharacterDetailsScreen
 import com.abdelrahman.marvelapp.navigation.CharactersScreen
 import com.abdelrahman.marvelapp.navigation.CharactersSearchScreen
 import com.abdelrahman.marvelapp.ui.theme.MarvelAppTheme
+import com.abdelrahman.shared_domain.models.ExtraData
 import com.abdelrahman.shared_domain.utils.defaultString
+import com.abdelrahman.shared_presentation.utils.toJson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,9 +62,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         modifier = Modifier.padding(
                             bottom = innerPadding.calculateBottomPadding()
-                        ),
-                        navController = navController,
-                        startDestination = CharactersScreen
+                        ), navController = navController, startDestination = CharactersScreen
                     ) {
                         composable<CharactersScreen> {
                             val charactersViewModel = hiltViewModel<CharactersViewModel>()
@@ -78,15 +85,14 @@ class MainActivity : ComponentActivity() {
                                     null -> Unit
                                 }
                             }
-                            CharactersScreen(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = innerPadding.calculateTopPadding())
-                                    .background(
-                                        color = colorResource(
-                                            id = R.color.black
-                                        )
-                                    ),
+                            CharactersScreen(modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = innerPadding.calculateTopPadding())
+                                .background(
+                                    color = colorResource(
+                                        id = R.color.black
+                                    )
+                                ),
                                 pagingComponentModel = charactersState.pagingComponentModel,
                                 loadingTypes = charactersState.loadingTypes,
                                 errorModel = charactersState.errorModel,
@@ -95,27 +101,64 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onSearchClick = {
                                     navController.navigate(CharactersSearchScreen)
-                                }) { _ ->
-
+                                }) { character ->
+                                val characterArguments = CharacterDetailsArgument(
+                                    character.name,
+                                    character.description,
+                                    character.comicsUri,
+                                    character.storiesUri,
+                                    character.eventsUri,
+                                    character.seriesUri,
+                                    character.extraData,
+                                    character.image
+                                )
+                                navController.navigate(
+                                    CharacterDetailsScreen(characterArguments.toJson())
+                                )
                             }
                         }
                         composable<CharactersSearchScreen> {
                             val searchViewModel = hiltViewModel<CharactersSearchViewModel>()
                             val state = searchViewModel.state.collectAsStateWithLifecycle().value
-                            SearchScreen(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = innerPadding.calculateTopPadding())
-                                    .background(
-                                        color = colorResource(
-                                            id = com.abdelrahman.shared_domain.R.color.darkGrey
-                                        )
-                                    ),
+                            SearchScreen(modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = innerPadding.calculateTopPadding())
+                                .background(
+                                    color = colorResource(
+                                        id = com.abdelrahman.shared_domain.R.color.darkGrey
+                                    )
+                                ),
                                 searchState = state,
-                                onCancelClick = { navController.navigateUp() }
-                            ) { event ->
+                                onCancelClick = { navController.navigateUp() }) { event ->
                                 searchViewModel.sendEvent(event)
                             }
+                        }
+                        composable<CharacterDetailsScreen> {
+                            val viewModel = hiltViewModel<CharacterDetailsViewModel>()
+                            val state = viewModel.state.collectAsStateWithLifecycle().value
+                            CharacterDetailsScreen(
+                                modifier = Modifier
+                                    .padding(top = innerPadding.calculateTopPadding())
+                                    .background(
+                                        brush = Brush.verticalGradient(
+                                            colors = arrayListOf(
+                                                colorResource(
+                                                    id = com.abdelrahman.shared_domain.R.color.black
+                                                ).copy(alpha = 0.5f), colorResource(
+                                                    id = com.abdelrahman.shared_domain.R.color.darkGrey
+                                                ), colorResource(
+                                                    id = com.abdelrahman.shared_domain.R.color.darkGrey
+                                                ),
+                                                colorResource(
+                                                    id = com.abdelrahman.shared_domain.R.color.black
+                                                )
+                                            )
+                                        )
+                                    )
+                                    .fillMaxSize(),
+                                characterDetailsData = state.characterDetailsData,
+                                loadingTypes = state.loadingTypes
+                            )
                         }
                     }
                 }

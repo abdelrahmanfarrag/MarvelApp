@@ -2,12 +2,12 @@ package com.abdelrahman.feature_characters_data.repository
 
 import com.abdelrahman.api.mappers.mapToDataState
 import com.abdelrahman.feature_characters_data.models.GetCharactersRequest
-import com.abdelrahman.feature_characters_data.models.createValidThumbnailURL
+import com.abdelrahman.shared_data.models.createValidThumbnailURL
 import com.abdelrahman.feature_characters_data.remotedatasource.ICharactersRemoteDataSource
-import com.abdelrahman.feature_characters_data.utils.ImageSpecs
+import com.abdelrahman.shared_data.models.ImageSpecs
 import com.abdelrahman.feature_characters_domain.models.Character
 import com.abdelrahman.feature_characters_domain.models.CharactersModel
-import com.abdelrahman.feature_characters_domain.models.Image
+import com.abdelrahman.shared_domain.models.Image
 import com.abdelrahman.feature_characters_domain.repository.ICharactersRepository
 import com.abdelrahman.shared_domain.models.DataState
 import com.abdelrahman.shared_domain.models.ExtraData
@@ -48,9 +48,21 @@ class CharactersRepository @Inject constructor(private val iCharactersRemoteData
                                 it.type == url.type
                             }
                             return@map when (type) {
-                                ExtraDataEnum.DETAIL -> ExtraData.Details(url.url)
-                                ExtraDataEnum.WIKI -> ExtraData.Wiki(url.url)
-                                ExtraDataEnum.COMIC_LINK -> ExtraData.ComicLink(url.url)
+                                ExtraDataEnum.DETAIL -> ExtraData(
+                                    com.abdelrahman.shared_domain.R.string.details,
+                                    url.url
+                                )
+
+                                ExtraDataEnum.WIKI -> ExtraData(
+                                    com.abdelrahman.shared_domain.R.string.wiki,
+                                    url.url
+                                )
+
+                                ExtraDataEnum.COMIC_LINK -> ExtraData(
+                                    com.abdelrahman.shared_domain.R.string.comic_link,
+                                    url.url
+                                )
+
                                 null -> null
                             }
                         } as ArrayList<ExtraData>,

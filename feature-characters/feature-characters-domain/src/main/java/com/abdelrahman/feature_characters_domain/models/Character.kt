@@ -1,6 +1,7 @@
 package com.abdelrahman.feature_characters_domain.models
 
 import com.abdelrahman.shared_domain.models.ExtraData
+import com.abdelrahman.shared_domain.models.Image
 
 data class Character(
     val id: Int?,

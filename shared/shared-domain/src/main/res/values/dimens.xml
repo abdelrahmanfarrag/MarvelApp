@@ -7,5 +7,8 @@
     <dimen name="dimen_32">32dp</dimen>
     <dimen name="dimen_20">20dp</dimen>
     <dimen name="dimen_56">56dp</dimen>
+    <dimen name="dimen_120">120dp</dimen>
     <dimen name="characterHeight">240dp</dimen>
+    <dimen name="dimen_280">280dp</dimen>
+    <dimen name="dimen_360">360dp</dimen>
 </resources>

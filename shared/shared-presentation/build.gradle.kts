@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.gson)
     implementation(projects.shared.sharedDomain)
     implementation(libs.bundles.presentation.bundle)
 }

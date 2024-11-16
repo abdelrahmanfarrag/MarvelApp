@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.bundles.data.bundle)
     implementation(projects.api)
     implementation(projects.shared.sharedDomain)
+    implementation(projects.shared.sharedData)
     implementation(projects.featureCharacters.featureCharactersDomain)
     kapt(libs.hiltCompiler)
 }

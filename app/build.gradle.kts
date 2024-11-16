@@ -65,5 +65,9 @@ dependencies {
     implementation(projects.shared.sharedDomain)
     implementation(projects.shared.sharedPresentation)
     implementation(libs.kotlinx.serialization.json)
+    implementation(projects.featureCharacterDetails.featureCharacterDetailsData)
+    implementation(projects.featureCharacterDetails.featureCharacterDetailsDomain)
+    implementation(projects.featureCharacterDetails.featureCharacterDetailsPresentation)
+
     kapt(libs.hiltCompiler)
 }

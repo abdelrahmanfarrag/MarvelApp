@@ -1,7 +1,5 @@
-package com.abdelrahman.feature_characters_data.models
+package com.abdelrahman.shared_data.models
 
-
-import com.abdelrahman.feature_characters_data.utils.ImageSpecs
 import com.google.gson.annotations.SerializedName
 
 data class Thumbnail(

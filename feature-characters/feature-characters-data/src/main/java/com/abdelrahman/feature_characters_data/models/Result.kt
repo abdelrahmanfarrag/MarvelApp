@@ -1,6 +1,7 @@
 package com.abdelrahman.feature_characters_data.models
 
 
+import com.abdelrahman.shared_data.models.Thumbnail
 import com.google.gson.annotations.SerializedName
 
 data class Result(
