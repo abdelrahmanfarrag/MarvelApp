@@ -8,6 +8,7 @@ import com.abdelrahman.shared_domain.models.ErrorModel
 import com.abdelrahman.shared_presentation.models.IPagingComponentInteractions
 import com.abdelrahman.shared_presentation.models.PagingComponentModel
 import com.abdelrahman.shared_presentation.ui.LoadingTypes
+import com.abdelrahman.shared_presentation.utils.Constants.PAGE_SIZE
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,8 +36,7 @@ class CharactersViewModel @Inject constructor(
     }
 
     private fun providesInteractions(): IPagingComponentInteractions {
-        return object :
-            IPagingComponentInteractions {
+        return object : IPagingComponentInteractions {
             override fun onRequestNextPage() {
                 sendEvent(CharactersListContract.CharacterEvents.GetCharacters(LoadingTypes.PAGING_PROGRESS))
             }
@@ -71,7 +71,7 @@ class CharactersViewModel @Inject constructor(
                         pagingComponentModel = pagingComponentModel.copy(loadingTypes = loadingTypes)
                     )
                 }
-                iGetCharactersUseCase(currentState.currentPage, null, 20).collect { result ->
+                iGetCharactersUseCase(currentState.currentPage, null, PAGE_SIZE).collect { result ->
                     when (result) {
                         is DataState.Error -> onError(result.errorModel)
                         is DataState.Success -> onSuccess(result.data)
@@ -88,8 +88,7 @@ class CharactersViewModel @Inject constructor(
                 copy(
                     charactersModel = data,
                     pagingComponentModel = pagingComponentModel.copy(
-                        loadingTypes = LoadingTypes.NONE,
-                        listItems = data?.characters
+                        loadingTypes = LoadingTypes.NONE, listItems = data?.characters
                     ),
                     loadingTypes = LoadingTypes.NONE,
                 )
@@ -97,13 +96,10 @@ class CharactersViewModel @Inject constructor(
         } else if (currentLoading == LoadingTypes.PAGING_PROGRESS) {
             setState {
                 copy(
-                    pagingComponentModel = pagingComponentModel.copy(
-                        loadingTypes = LoadingTypes.NONE,
+                    pagingComponentModel = pagingComponentModel.copy(loadingTypes = LoadingTypes.NONE,
                         listItems = charactersModel?.characters?.apply {
                             addAll(data?.characters ?: arrayListOf())
-                        }),
-                    loadingTypes = LoadingTypes.NONE,
-                    errorModel = null
+                        }), loadingTypes = LoadingTypes.NONE, errorModel = null
                 )
             }
         }
@@ -117,8 +113,7 @@ class CharactersViewModel @Inject constructor(
                     loadingTypes = LoadingTypes.NONE,
                     currentPage = page,
                     pagingComponentModel = pagingComponentModel.copy(
-                        loadingTypes = LoadingTypes.NONE,
-                        listItems = charactersModel?.characters
+                        loadingTypes = LoadingTypes.NONE, listItems = charactersModel?.characters
                     )
                 )
             }
@@ -128,17 +123,15 @@ class CharactersViewModel @Inject constructor(
                 )
             }
 
-        } else
-            setState {
-                copy(
-                    loadingTypes = LoadingTypes.NONE,
-                    errorModel = errorModel,
-                    currentPage = page,
-                    pagingComponentModel = pagingComponentModel.copy(
-                        loadingTypes = LoadingTypes.NONE,
-                        listItems = charactersModel?.characters
-                    )
+        } else setState {
+            copy(
+                loadingTypes = LoadingTypes.NONE,
+                errorModel = errorModel,
+                currentPage = page,
+                pagingComponentModel = pagingComponentModel.copy(
+                    loadingTypes = LoadingTypes.NONE, listItems = charactersModel?.characters
                 )
-            }
+            )
+        }
     }
 }

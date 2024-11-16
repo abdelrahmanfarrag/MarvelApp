@@ -6,6 +6,7 @@ import com.abdelrahman.feature_characters_domain.usecase.getcharacters.IGetChara
 import com.abdelrahman.shared_domain.models.DataState
 import com.abdelrahman.shared_domain.models.ErrorModel
 import com.abdelrahman.shared_presentation.ui.LoadingTypes
+import com.abdelrahman.shared_presentation.utils.Constants.PAGE_SIZE
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,21 +34,23 @@ class CharactersSearchViewModel @Inject constructor(
     }
 
     private fun callGetCharacters() {
-        viewModelScope.launch {
-            setState {
-                copy(
-                    loadingTypes = LoadingTypes.NORMAL_PROGRESS,
-                    errorModel = null
-                )
-            }
-            iGetCharactersUseCase(
-                currentState.currentPage,
-                currentState.typedText,
-                20
-            ).collect { result ->
-                when (result) {
-                    is DataState.Error -> onError(result.errorModel)
-                    is DataState.Success -> onSuccess(result.data)
+        if (!currentState.typedText.isNullOrEmpty() && !currentState.typedText.isNullOrBlank()) {
+            viewModelScope.launch {
+                setState {
+                    copy(
+                        loadingTypes = LoadingTypes.NORMAL_PROGRESS,
+                        errorModel = null
+                    )
+                }
+                iGetCharactersUseCase(
+                    currentState.currentPage,
+                    currentState.typedText,
+                    PAGE_SIZE
+                ).collect { result ->
+                    when (result) {
+                        is DataState.Error -> onError(result.errorModel)
+                        is DataState.Success -> onSuccess(result.data)
+                    }
                 }
             }
         }

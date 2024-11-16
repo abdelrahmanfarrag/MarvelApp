@@ -24,7 +24,7 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     searchState: CharactersSearchContract.CharactersSearchState? = null,
     onCancelClick: () -> Unit = {},
-    onCharacterClick: (Character?) -> Unit = {},
+    onCharacterClick: (Character) -> Unit = {},
     onEvent: (CharactersSearchContract.CharactersSearchEvents) -> Unit = {}
 ) {
     Column(modifier = modifier) {

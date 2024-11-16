@@ -126,6 +126,19 @@ class MainActivity : ComponentActivity() {
                                     )
                                 ),
                                 searchState = state,
+                                onCharacterClick = { character ->
+                                    val characterArguments = CharacterDetailsArgument(
+                                        character.name,
+                                        character.description,
+                                        character.comicsUri,
+                                        character.storiesUri,
+                                        character.eventsUri,
+                                        character.seriesUri,
+                                        character.extraData,
+                                        character.image
+                                    )
+                                    navController.navigate(CharacterDetailsScreen(characterArguments.toJson()))
+                                },
                                 onCancelClick = { navController.navigateUp() }) { event ->
                                 searchViewModel.sendEvent(event)
                             }
@@ -155,7 +168,9 @@ class MainActivity : ComponentActivity() {
                                     .fillMaxSize(),
                                 characterDetailsData = state.characterDetailsData,
                                 loadingTypes = state.loadingTypes
-                            )
+                            ) {
+                                navController.navigateUp()
+                            }
                         }
                     }
                 }

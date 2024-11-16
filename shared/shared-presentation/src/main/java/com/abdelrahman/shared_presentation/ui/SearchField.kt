@@ -3,7 +3,6 @@ package com.abdelrahman.shared_presentation.ui
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,8 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
-import com.abdelrahman.shared_presentation.utils.Constants.DELAY_ONE_SECOND
-import kotlinx.coroutines.delay
 
 @Composable
 fun SearchField(
@@ -31,15 +28,6 @@ fun SearchField(
 ) {
     val keyBoardController = LocalSoftwareKeyboardController.current
     var currentQuery by remember { mutableStateOf(textValue) }
-    var isFirstLaunch by remember { mutableStateOf(true) }
-
-    LaunchedEffect(currentQuery) {
-        if (!isFirstLaunch) {
-            delay(DELAY_ONE_SECOND)
-            keyBoardController?.hide()
-        }
-        isFirstLaunch = false
-    }
 
     InputTextField(
         enabled = true,
