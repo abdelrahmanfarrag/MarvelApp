@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.abdelrahman.feature_character_details_presentation.models.CharacterDetailsArgument
 import com.abdelrahman.feature_character_details_presentation.models.CharacterDetailsData
+import com.abdelrahman.feature_character_details_presentation.utils.Constants.NAVIGATION_ARGUMENT
 import com.abdelrahman.feature_character_domain.models.ContentType
 import com.abdelrahman.feature_character_domain.usecase.mergedynamiccontentusecase.IMergeDynamicContentUseCase
 import com.abdelrahman.shared_domain.models.DataState
@@ -38,7 +39,7 @@ class CharacterDetailsViewModel @Inject constructor(
 
     private fun setCharacterDetailsArgument() {
         val characterDetailsArgument =
-            mSavedStateHandle.get<String>("characterDetailsArgumentsGson")
+            mSavedStateHandle.get<String>(NAVIGATION_ARGUMENT)
                 ?.convertJsonArgumentToClass<CharacterDetailsArgument?>()
         setState {
             copy(

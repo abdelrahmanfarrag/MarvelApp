@@ -55,7 +55,10 @@ fun ErrorLayout(
                         .wrapContentHeight()
                         .padding(horizontal = dimensionResource(id = R.dimen.dimen_32)),
                     onButtonClick = { onRetry() }) {
-                    Text(text = stringResource(id = R.string.retry))
+                    Text(
+                        color = colorResource(id = R.color.white),
+                        text = stringResource(id = R.string.retry)
+                    )
                 }
         }
     }
