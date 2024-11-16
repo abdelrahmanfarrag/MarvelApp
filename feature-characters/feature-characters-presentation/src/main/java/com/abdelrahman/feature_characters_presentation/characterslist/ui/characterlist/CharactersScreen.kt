@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -79,38 +80,39 @@ fun CharactersScreen(
             CircularProgressIndicator()
         }
     else {
-        PullToRefreshBox(
-            isRefreshing = loadingTypes == LoadingTypes.PULL_TO_REFRESH,
-            onRefresh = {
-                onEvent(
+        if (errorModel != null)
+            ErrorLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(colorResource(id = R.color.black)),
+                errorModel = errorModel
+            ) {
+                onEvent.invoke(
                     CharactersListContract.CharacterEvents.GetCharacters(
-                        LoadingTypes.PULL_TO_REFRESH
+                        LoadingTypes.NORMAL_PROGRESS
                     )
                 )
-            }) {
-            Column(modifier = modifier) {
-                Header(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .background(color = colorResource(id = R.color.black))
-                ) {
-                    onSearchClick()
-                }
-                if (errorModel != null)
-                    ErrorLayout(
+            }
+        else
+            PullToRefreshBox(
+                isRefreshing = loadingTypes == LoadingTypes.PULL_TO_REFRESH,
+                onRefresh = {
+                    onEvent(
+                        CharactersListContract.CharacterEvents.GetCharacters(
+                            LoadingTypes.PULL_TO_REFRESH
+                        )
+                    )
+                }) {
+                Column(modifier = modifier) {
+                    Header(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f),
-                        errorModel = errorModel
+                            .wrapContentHeight()
+                            .background(color = colorResource(id = R.color.black))
                     ) {
-                        onEvent.invoke(
-                            CharactersListContract.CharacterEvents.GetCharacters(
-                                LoadingTypes.NORMAL_PROGRESS
-                            )
-                        )
+                        onSearchClick()
                     }
-                else
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -139,8 +141,8 @@ fun CharactersScreen(
                                 }
                             }
                     }
+                }
             }
-        }
     }
 }
 

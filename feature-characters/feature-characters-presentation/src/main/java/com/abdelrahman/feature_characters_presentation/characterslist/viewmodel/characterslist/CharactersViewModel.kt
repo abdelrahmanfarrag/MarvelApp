@@ -53,7 +53,8 @@ class CharactersViewModel @Inject constructor(
             viewModelScope.launch {
                 setState {
                     copy(
-                        loadingTypes = loadingTypes
+                        loadingTypes = loadingTypes,
+                        errorModel = null
                     )
                 }
                 iGetCharactersUseCase(currentState.currentPage, null, 20).collect { result ->
@@ -92,16 +93,17 @@ class CharactersViewModel @Inject constructor(
 
     private fun onError(errorModel: ErrorModel?) {
         if (currentState.charactersModel?.characters?.isNotEmpty() == true) {
-            sendSingleUIEvent {
-                CharactersListContract.CharactersSingleActions.ShowToastMessage(
-                    errorModel?.errorMessage
-                )
-            }
             setState {
                 copy(
                     loadingTypes = LoadingTypes.NONE
                 )
             }
+            sendSingleUIEvent {
+                CharactersListContract.CharactersSingleActions.ShowToastMessage(
+                    errorModel?.errorMessage
+                )
+            }
+
         } else
             setState {
                 copy(
