@@ -5,7 +5,7 @@ import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.feature_characters_domain.usecase.getcharacters.IGetCharactersUseCase
 import com.abdelrahman.shared_domain.models.DataState
 import com.abdelrahman.shared_domain.models.ErrorModel
-import com.abdelrahman.shared_presentation.LoadingTypes
+import com.abdelrahman.shared_presentation.ui.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,13 +33,8 @@ class CharactersViewModel @Inject constructor(
     private fun setCurrentPage(loadingTypes: LoadingTypes) {
         val currentPage = when (loadingTypes) {
             LoadingTypes.NONE -> currentState.currentPage
-            LoadingTypes.NORMAL_PROGRESS -> 0
-            LoadingTypes.PAGING_PROGRESS -> if (currentState.currentPage < (currentState.charactersModel?.totalPages
-                    ?: 0)
-            ) currentState.currentPage + 1
-            else currentState.currentPage
-
-            LoadingTypes.PULL_TO_REFRESH -> 0
+            LoadingTypes.NORMAL_PROGRESS, LoadingTypes.PULL_TO_REFRESH -> 0
+            LoadingTypes.PAGING_PROGRESS -> currentState.currentPage + 1
         }
         setState {
             copy(
@@ -49,7 +44,8 @@ class CharactersViewModel @Inject constructor(
     }
 
     private fun callGetCharacters(loadingTypes: LoadingTypes) {
-        if (currentState.currentPage <= (currentState.charactersModel?.totalPages ?: 0))
+        if (currentState.currentPage <= (currentState.charactersModel?.totalPages ?: 0)) {
+            setCurrentPage(loadingTypes)
             viewModelScope.launch {
                 setState {
                     copy(
@@ -64,16 +60,16 @@ class CharactersViewModel @Inject constructor(
                     }
                 }
             }
+        }
     }
 
     private fun onSuccess(data: CharactersModel?) {
         val currentLoading = currentState.loadingTypes
-        setCurrentPage(currentLoading)
         if (currentLoading == LoadingTypes.NORMAL_PROGRESS || currentLoading == LoadingTypes.PULL_TO_REFRESH) {
             setState {
                 copy(
                     charactersModel = data,
-                    loadingTypes = LoadingTypes.NONE
+                    loadingTypes = LoadingTypes.NONE,
                 )
             }
         } else if (currentLoading == LoadingTypes.PAGING_PROGRESS) {
@@ -92,10 +88,12 @@ class CharactersViewModel @Inject constructor(
     }
 
     private fun onError(errorModel: ErrorModel?) {
+        val page = if (currentState.currentPage > 0) currentState.currentPage - 1 else 0
         if (currentState.charactersModel?.characters?.isNotEmpty() == true) {
             setState {
                 copy(
-                    loadingTypes = LoadingTypes.NONE
+                    loadingTypes = LoadingTypes.NONE,
+                    currentPage = page
                 )
             }
             sendSingleUIEvent {
@@ -108,7 +106,8 @@ class CharactersViewModel @Inject constructor(
             setState {
                 copy(
                     loadingTypes = LoadingTypes.NONE,
-                    errorModel = errorModel
+                    errorModel = errorModel,
+                    currentPage = page
                 )
             }
     }

@@ -4,18 +4,15 @@ package com.abdelrahman.feature_characters_presentation.characterslist.ui.charac
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -23,17 +20,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.abdelrahman.feature_characters_domain.models.Character
-import com.abdelrahman.feature_characters_presentation.characterslist.ui.components.ErrorLayout
+import com.abdelrahman.shared_presentation.ui.ErrorLayout
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist.CharactersListContract
 import com.abdelrahman.shared_domain.R
 import com.abdelrahman.shared_domain.models.ErrorModel
-import com.abdelrahman.shared_presentation.LoadingTypes
+import com.abdelrahman.shared_presentation.ui.LoadingTypes
+import com.abdelrahman.shared_presentation.ui.AppDefaultProgressbar
+import com.abdelrahman.shared_presentation.ui.pagingProgressbar
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 
@@ -71,14 +68,11 @@ fun CharactersScreen(
     }
 
     if (loadingTypes == LoadingTypes.NORMAL_PROGRESS)
-        Box(
+        AppDefaultProgressbar(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = colorResource(id = R.color.black)),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
+        )
     else {
         if (errorModel != null)
             ErrorLayout(
@@ -124,22 +118,9 @@ fun CharactersScreen(
                                 onPickCharacter.invoke(character)
                             }, character = character)
                         }
-                        if (loadingTypes == LoadingTypes.PAGING_PROGRESS)
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillParentMaxWidth()
-                                        .wrapContentHeight()
-                                        .background(color = colorResource(id = R.color.black))
-                                        .padding(
-                                            vertical = dimensionResource(
-                                                id = R.dimen.dimen_8
-                                            )
-                                        ), contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator()
-                                }
-                            }
+                        pagingProgressbar(
+                            loadingTypes == LoadingTypes.PAGING_PROGRESS
+                        )
                     }
                 }
             }

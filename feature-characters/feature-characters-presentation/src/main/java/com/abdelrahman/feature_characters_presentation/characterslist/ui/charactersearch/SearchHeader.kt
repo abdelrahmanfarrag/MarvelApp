@@ -15,9 +15,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.abdelrahman.shared_domain.R
-import com.abdelrahman.feature_characters_presentation.characterslist.ui.components.SearchField
+import com.abdelrahman.shared_presentation.ui.SearchField
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterssearch.CharactersSearchContract
-import com.abdelrahman.shared_presentation.LoadingTypes
 
 @Composable
 fun SearchHeader(

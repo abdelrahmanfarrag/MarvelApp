@@ -35,7 +35,7 @@ class CharactersRemoteDataSource @Inject constructor(
                 )
             )
         } else
-            ResponseState.StateError(ErrorModel.NoInternetConnectModel())
+            ResponseState.StateError(ErrorModel.NoInternetConnectModel)
                     as ResponseState<BaseMarvelAPIResponse<CharactersResponse>>
     }
 }

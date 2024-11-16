@@ -1,4 +1,4 @@
-package com.abdelrahman.feature_characters_presentation.characterslist.ui.components
+package com.abdelrahman.shared_presentation.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape

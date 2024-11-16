@@ -1,4 +1,4 @@
-package com.abdelrahman.feature_characters_presentation.characterslist.ui.components
+package com.abdelrahman.shared_presentation.ui
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
-import com.abdelrahman.feature_characters_presentation.R
-import com.abdelrahman.feature_characters_presentation.utils.Constants.DELAY_ONE_SECOND
+import androidx.compose.ui.text.input.ImeAction
+import com.abdelrahman.shared_presentation.utils.Constants.DELAY_ONE_SECOND
 import kotlinx.coroutines.delay
 
 @Composable
@@ -26,7 +26,7 @@ fun SearchField(
     borderColor: Color = colorResource(com.abdelrahman.shared_domain.R.color.black),
     backgroundColor: Color = Color.White,
     onSearch: (String?) -> Unit,
-    leadingIcon: @Composable (() -> Unit) = { IconSearchField() },
+    leadingIcon: @Composable (() -> Unit) = { IconSearchField(onSearchClick = { onSearch.invoke(null) }) },
     cursorColor: Color = Color.Black
 ) {
     val keyBoardController = LocalSoftwareKeyboardController.current
@@ -37,7 +37,6 @@ fun SearchField(
         if (!isFirstLaunch) {
             delay(DELAY_ONE_SECOND)
             keyBoardController?.hide()
-            onSearch(currentQuery)
         }
         isFirstLaunch = false
     }
@@ -57,7 +56,7 @@ fun SearchField(
         borderColor = borderColor,
         cursorColor = cursorColor,
         keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = androidx.compose.ui.text.input.ImeAction.Search
+            imeAction = ImeAction.Search
         ),
         keyboardActions = KeyboardActions(
             onSearch = {

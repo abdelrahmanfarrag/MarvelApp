@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onSearchClick = {
                                     navController.navigate(CharactersSearchScreen)
-                                }) { character ->
+                                }) { _ ->
 
                             }
                         }

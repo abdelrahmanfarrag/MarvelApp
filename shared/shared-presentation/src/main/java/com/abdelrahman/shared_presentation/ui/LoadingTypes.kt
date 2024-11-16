@@ -1,4 +1,4 @@
-package com.abdelrahman.shared_presentation
+package com.abdelrahman.shared_presentation.ui
 
 enum class LoadingTypes {
     NONE,

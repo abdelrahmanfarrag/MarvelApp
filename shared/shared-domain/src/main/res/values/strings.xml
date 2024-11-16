@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="failed_connect">Failed to connect.</string>
     <string name="no_internet_connection">No internet connection.</string>
     <string name="something_went_wrong">Something went wrong.</string>
+    <string name="no_result">No Result</string>
+    <string name="no_data_found">No data found matching your search key , please try again using different search key.</string>
     <string name="search">Search…</string>
     <string name="cancel">Cancel</string>
     <string name="retry">Retry</string>

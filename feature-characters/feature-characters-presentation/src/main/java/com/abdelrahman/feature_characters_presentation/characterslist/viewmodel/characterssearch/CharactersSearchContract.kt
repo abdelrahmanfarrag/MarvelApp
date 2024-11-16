@@ -2,7 +2,7 @@ package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel
 
 import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.shared_domain.models.ErrorModel
-import com.abdelrahman.shared_presentation.LoadingTypes
+import com.abdelrahman.shared_presentation.ui.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.Event
 import com.abdelrahman.shared_presentation.viewmodel.SingleUIEvent
 import com.abdelrahman.shared_presentation.viewmodel.State
@@ -18,7 +18,6 @@ class CharactersSearchContract {
     ) : State
 
     sealed class CharactersSearchEvents : Event {
-        data class LoadData(val searchKey: String?, val loadingTypes: LoadingTypes) : CharactersSearchEvents()
         data class UpdateTypedText(val typedText:String?):CharactersSearchEvents()
         data object SearchForResult : CharactersSearchEvents()
     }
