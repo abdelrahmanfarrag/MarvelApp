@@ -10,9 +10,12 @@ import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.feature_characters_domain.models.Image
 import com.abdelrahman.feature_characters_domain.repository.ICharactersRepository
 import com.abdelrahman.shared_domain.models.DataState
+import com.abdelrahman.shared_domain.models.ExtraData
+import com.abdelrahman.shared_domain.models.ExtraDataEnum
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST", "LABEL_NAME_CLASH")
 class CharactersRepository @Inject constructor(private val iCharactersRemoteDataSource: ICharactersRemoteDataSource) :
     ICharactersRepository {
 
@@ -36,6 +39,21 @@ class CharactersRepository @Inject constructor(private val iCharactersRemoteData
                         name = response.name,
                         description = response.description,
                         modifiedDate = response.modified,
+                        comicsUri = response.comics?.collectionURI,
+                        seriesUri = response.series?.collectionURI,
+                        storiesUri = response.stories?.collectionURI,
+                        eventsUri = response.events?.collectionURI,
+                        extraData = response.urls?.map { url ->
+                            val type = ExtraDataEnum.entries.toTypedArray().find {
+                                it.type == url.type
+                            }
+                            return@map when (type) {
+                                ExtraDataEnum.DETAIL -> ExtraData.Details(url.url)
+                                ExtraDataEnum.WIKI -> ExtraData.Wiki(url.url)
+                                ExtraDataEnum.COMIC_LINK -> ExtraData.ComicLink(url.url)
+                                null -> null
+                            }
+                        } as ArrayList<ExtraData>,
                         image = Image(
                             landscapeImage = response.thumbnail?.createValidThumbnailURL(ImageSpecs.LANDSCAPE_INCREDIBLE),
                             squareImage = response.thumbnail?.createValidThumbnailURL(ImageSpecs.STANDARD_AMAZING),

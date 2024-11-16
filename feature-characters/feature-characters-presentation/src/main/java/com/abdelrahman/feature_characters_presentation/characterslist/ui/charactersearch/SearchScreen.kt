@@ -16,6 +16,8 @@ import com.abdelrahman.feature_characters_domain.models.Character
 import com.abdelrahman.shared_presentation.ui.ErrorLayout
 import com.abdelrahman.shared_domain.R
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterssearch.CharactersSearchContract
+import com.abdelrahman.shared_presentation.ui.AppDefaultProgressbar
+import com.abdelrahman.shared_presentation.ui.LoadingTypes
 
 @Composable
 fun SearchScreen(
@@ -40,25 +42,34 @@ fun SearchScreen(
             onCancelClick = onCancelClick,
             value = searchState?.typedText
         )
-        if (searchState?.errorModel != null)
-            ErrorLayout(modifier = Modifier.weight(1f), errorModel = searchState.errorModel) {
-                onEvent(CharactersSearchContract.CharactersSearchEvents.SearchForResult)
-            }
-        else
-            LazyColumn(modifier = Modifier.weight(1f)) {
-                items(searchState?.charactersModel?.characters ?: arrayListOf()) { character ->
-                    ItemCharacterSearch(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .background(colorResource(id = R.color.lighterGrey))
-                            .clickable {
-                                onCharacterClick.invoke(character)
-                            },
-                        character = character
-                    )
+        if (searchState?.loadingTypes == LoadingTypes.NORMAL_PROGRESS) {
+            AppDefaultProgressbar(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(color = colorResource(id = R.color.black))
+            )
+        } else {
+            if (searchState?.errorModel != null)
+                ErrorLayout(modifier = Modifier.weight(1f), errorModel = searchState.errorModel) {
+                    onEvent(CharactersSearchContract.CharactersSearchEvents.SearchForResult)
                 }
-            }
+            else
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(searchState?.charactersModel?.characters ?: arrayListOf()) { character ->
+                        ItemCharacterSearch(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .background(colorResource(id = R.color.lighterGrey))
+                                .clickable {
+                                    onCharacterClick.invoke(character)
+                                },
+                            character = character
+                        )
+                    }
+                }
+        }
     }
 
 }

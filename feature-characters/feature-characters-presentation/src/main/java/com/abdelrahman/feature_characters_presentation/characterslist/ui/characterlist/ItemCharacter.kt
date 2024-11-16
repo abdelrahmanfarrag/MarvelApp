@@ -25,12 +25,12 @@ import com.bumptech.glide.integration.compose.GlideImage
 @Composable
 fun ItemCharacter(
     modifier: Modifier = Modifier,
-    character: Character = Character(null, null, null, null, null)
+    character: Character = Character(null, null, null,
+        null, null, null, null, null, null, null)
 ) {
 
     Box(
-        modifier = modifier
-            .wrapContentSize()
+        modifier = modifier.wrapContentSize()
     ) {
         GlideImage(
             modifier = Modifier
