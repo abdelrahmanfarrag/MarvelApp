@@ -28,8 +28,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.abdelrahman.feature_characters_domain.models.Character
+import com.abdelrahman.feature_characters_presentation.characterslist.ui.components.ErrorLayout
 import com.abdelrahman.feature_characters_presentation.characterslist.viewmodel.characterslist.CharactersListContract
 import com.abdelrahman.shared_domain.R
+import com.abdelrahman.shared_domain.models.ErrorModel
 import com.abdelrahman.shared_presentation.LoadingTypes
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -40,7 +42,9 @@ fun CharactersScreen(
     characters: ArrayList<Character>? = arrayListOf(),
     loadingTypes: LoadingTypes = LoadingTypes.NONE,
     listState: LazyListState = rememberLazyListState(),
+    errorModel: ErrorModel? = null,
     onEvent: (CharactersListContract.CharacterEvents) -> Unit = {},
+    onSearchClick: () -> Unit = {},
     onPickCharacter: (Character) -> Unit = {}
 ) {
     val shouldLoadMore = remember {
@@ -69,7 +73,7 @@ fun CharactersScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = colorResource(id = com.abdelrahman.shared_domain.R.color.black)),
+                .background(color = colorResource(id = R.color.black)),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
@@ -77,42 +81,64 @@ fun CharactersScreen(
     else {
         PullToRefreshBox(
             isRefreshing = loadingTypes == LoadingTypes.PULL_TO_REFRESH,
-            onRefresh = { onEvent(CharactersListContract.CharacterEvents.GetCharacters(LoadingTypes.PULL_TO_REFRESH)) }) {
+            onRefresh = {
+                onEvent(
+                    CharactersListContract.CharacterEvents.GetCharacters(
+                        LoadingTypes.PULL_TO_REFRESH
+                    )
+                )
+            }) {
             Column(modifier = modifier) {
                 Header(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .background(color = colorResource(id = R.color.black))
-                )
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    state = listState
                 ) {
-                    items(characters ?: arrayListOf()) { character ->
-                        ItemCharacter(modifier = Modifier.clickable {
-                            onPickCharacter.invoke(character)
-                        }, character = character)
-                    }
-                    if (loadingTypes == LoadingTypes.PAGING_PROGRESS)
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .wrapContentHeight()
-                                    .background(color = colorResource(id = com.abdelrahman.shared_domain.R.color.black))
-                                    .padding(
-                                        vertical = dimensionResource(
-                                            id = com.abdelrahman.shared_domain.R.dimen.dimen_8
-                                        )
-                                    ), contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        }
+                    onSearchClick()
                 }
+                if (errorModel != null)
+                    ErrorLayout(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        errorModel = errorModel
+                    ) {
+                        onEvent.invoke(
+                            CharactersListContract.CharacterEvents.GetCharacters(
+                                LoadingTypes.NORMAL_PROGRESS
+                            )
+                        )
+                    }
+                else
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        state = listState
+                    ) {
+                        items(characters ?: arrayListOf()) { character ->
+                            ItemCharacter(modifier = Modifier.clickable {
+                                onPickCharacter.invoke(character)
+                            }, character = character)
+                        }
+                        if (loadingTypes == LoadingTypes.PAGING_PROGRESS)
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillParentMaxWidth()
+                                        .wrapContentHeight()
+                                        .background(color = colorResource(id = R.color.black))
+                                        .padding(
+                                            vertical = dimensionResource(
+                                                id = R.dimen.dimen_8
+                                            )
+                                        ), contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                    }
             }
         }
     }

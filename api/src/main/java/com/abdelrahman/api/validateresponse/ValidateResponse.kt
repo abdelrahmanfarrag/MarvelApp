@@ -2,7 +2,6 @@ package com.abdelrahman.api.validateresponse
 
 import com.abdelrahman.api.models.ErrorResponse
 import com.abdelrahman.api.models.ResponseState
-import com.abdelrahman.api.networkcheck.ICheckNetworkAvailability
 import com.abdelrahman.shared_domain.R
 import com.abdelrahman.shared_domain.models.ErrorModel
 import com.abdelrahman.shared_domain.models.TextWrapper
@@ -16,26 +15,23 @@ import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class ValidateResponse @Inject constructor(
-    private val iCheckNetworkAvailability: ICheckNetworkAvailability,
     private val mGson: Gson
 ) : IValidateResponse {
 
     override suspend fun <T> validateApiResponse(response: Response<T>): ResponseState<T> {
-        return if (iCheckNetworkAvailability.isNetworkAvailable()) {
-            try {
-                val apiResponse = response.body()
-                if (response.isSuccessful && apiResponse != null)
-                    ResponseState.StateSuccess(apiResponse)
-                else {
-                    onErrorHappened(response.errorBody(), response.code())
-                }
-            } catch (httpException: HttpException) {
-                onHttpExceptionHappens(httpException)
-            } catch (exception: Exception) {
-                onExceptionHappen(exception)
-            } as ResponseState<T>
-        } else
-            ResponseState.StateError(ErrorModel.NoInternetConnectModel()) as ResponseState<T>
+        return try {
+            val apiResponse = response.body()
+            if (response.isSuccessful && apiResponse != null)
+                ResponseState.StateSuccess(apiResponse)
+            else {
+                onErrorHappened(response.errorBody(), response.code())
+            }
+        } catch (httpException: HttpException) {
+            onHttpExceptionHappens(httpException)
+        } catch (exception: Exception) {
+            onExceptionHappen(exception)
+        } as ResponseState<T>
+
     }
 
     private fun onErrorHappened(responseBody: ResponseBody?, code: Int): ResponseState.StateError {
@@ -47,16 +43,16 @@ class ValidateResponse @Inject constructor(
         return if (errorBody != null)
             ResponseState.StateError(
                 errorModel = ErrorModel.ApiError(
-                    errorMessage = TextWrapper.StringText(
+                    message = TextWrapper.StringText(
                         errorBody.errorDescription.defaultString(),
                     ),
-                    errorCode = errorBody.code
+                    code = errorBody.code.toString()
                 )
             ) else {
             ResponseState.StateError(
                 errorModel = ErrorModel.ApiError(
-                    errorMessage = TextWrapper.ResourceText(R.string.something_went_wrong),
-                    errorCode = code
+                    message = TextWrapper.ResourceText(R.string.something_went_wrong),
+                    code = code.toString()
                 )
             )
         }
@@ -66,7 +62,7 @@ class ValidateResponse @Inject constructor(
         return ResponseState.StateError(
             ErrorModel.ApiError(
                 TextWrapper.StringText(httpException.message()),
-                httpException.code()
+                httpException.code().toString()
             )
         )
     }
@@ -75,7 +71,7 @@ class ValidateResponse @Inject constructor(
         return ResponseState.StateError(
             ErrorModel.ApiError(
                 TextWrapper.StringText(exception.message!!),
-                Constants.DEFAULT_ERROR_CODE
+                Constants.DEFAULT_ERROR_CODE.toString()
             )
         )
     }

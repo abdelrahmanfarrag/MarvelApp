@@ -2,6 +2,7 @@ package com.abdelrahman.feature_characters_presentation.characterslist.viewmodel
 
 import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.shared_domain.models.ErrorModel
+import com.abdelrahman.shared_domain.models.TextWrapper
 import com.abdelrahman.shared_presentation.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.Event
 import com.abdelrahman.shared_presentation.viewmodel.SingleUIEvent
@@ -20,5 +21,7 @@ class CharactersListContract {
             CharacterEvents()
     }
 
-    sealed class CharactersSingleActions : SingleUIEvent
+    sealed class CharactersSingleActions : SingleUIEvent {
+        data class ShowToastMessage(val textWrapper: TextWrapper?) : CharactersSingleActions()
+    }
 }
