@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -28,10 +29,11 @@ class ValidateResponse @Inject constructor(
             }
         } catch (httpException: HttpException) {
             onHttpExceptionHappens(httpException)
+        } catch (exception: SocketTimeoutException) {
+            onExceptionHappen(exception)
         } catch (exception: Exception) {
             onExceptionHappen(exception)
         } as ResponseState<T>
-
     }
 
     private fun onErrorHappened(responseBody: ResponseBody?, code: Int): ResponseState.StateError {

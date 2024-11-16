@@ -62,7 +62,6 @@ class MainActivity : ComponentActivity() {
                             val charactersViewModel = hiltViewModel<CharactersViewModel>()
                             val charactersState =
                                 charactersViewModel.state.collectAsStateWithLifecycle().value
-                            val listState = rememberLazyListState()
                             val oneTimeAction =
                                 charactersViewModel.singleEvent.collectAsStateWithLifecycle(
                                     initialValue = null
@@ -89,9 +88,8 @@ class MainActivity : ComponentActivity() {
                                             id = R.color.black
                                         )
                                     ),
-                                characters = charactersState.charactersModel?.characters,
+                                pagingComponentModel = charactersState.pagingComponentModel,
                                 loadingTypes = charactersState.loadingTypes,
-                                listState = listState,
                                 errorModel = charactersState.errorModel,
                                 onEvent = {
                                     charactersViewModel.sendEvent(it)

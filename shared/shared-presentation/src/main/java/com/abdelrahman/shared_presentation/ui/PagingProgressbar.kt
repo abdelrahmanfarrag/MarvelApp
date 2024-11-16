@@ -17,7 +17,7 @@ fun LazyListScope.pagingProgressbar(shouldShow: Boolean = false) {
         item {
             Box(
                 modifier = Modifier
-                    .fillParentMaxHeight()
+                    .fillParentMaxWidth()
                     .wrapContentHeight()
                     .background(color = colorResource(id = R.color.darkGrey))
                     .padding(

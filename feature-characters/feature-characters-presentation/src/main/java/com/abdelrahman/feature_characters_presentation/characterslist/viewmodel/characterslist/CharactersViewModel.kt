@@ -5,6 +5,8 @@ import com.abdelrahman.feature_characters_domain.models.CharactersModel
 import com.abdelrahman.feature_characters_domain.usecase.getcharacters.IGetCharactersUseCase
 import com.abdelrahman.shared_domain.models.DataState
 import com.abdelrahman.shared_domain.models.ErrorModel
+import com.abdelrahman.shared_presentation.models.IPagingComponentInteractions
+import com.abdelrahman.shared_presentation.models.PagingComponentModel
 import com.abdelrahman.shared_presentation.ui.LoadingTypes
 import com.abdelrahman.shared_presentation.viewmodel.MviBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +19,9 @@ class CharactersViewModel @Inject constructor(
 ) : MviBaseViewModel<CharactersListContract.CharactersUIState, CharactersListContract.CharacterEvents, CharactersListContract.CharactersSingleActions>() {
 
     override fun createInitialState(): CharactersListContract.CharactersUIState {
-        return CharactersListContract.CharactersUIState()
+        return CharactersListContract.CharactersUIState(
+            pagingComponentModel = PagingComponentModel(iPagingComponentInteractions = providesInteractions())
+        )
     }
 
     init {
@@ -27,6 +31,19 @@ class CharactersViewModel @Inject constructor(
     override fun onEvent(event: CharactersListContract.CharacterEvents) {
         when (event) {
             is CharactersListContract.CharacterEvents.GetCharacters -> callGetCharacters(event.loadingTypes)
+        }
+    }
+
+    private fun providesInteractions(): IPagingComponentInteractions {
+        return object :
+            IPagingComponentInteractions {
+            override fun onRequestNextPage() {
+                sendEvent(CharactersListContract.CharacterEvents.GetCharacters(LoadingTypes.PAGING_PROGRESS))
+            }
+
+            override fun onPullToRefresh() {
+                sendEvent(CharactersListContract.CharacterEvents.GetCharacters(LoadingTypes.PULL_TO_REFRESH))
+            }
         }
     }
 
@@ -50,7 +67,8 @@ class CharactersViewModel @Inject constructor(
                 setState {
                     copy(
                         loadingTypes = loadingTypes,
-                        errorModel = null
+                        errorModel = null,
+                        pagingComponentModel = pagingComponentModel.copy(loadingTypes = loadingTypes)
                     )
                 }
                 iGetCharactersUseCase(currentState.currentPage, null, 20).collect { result ->
@@ -69,17 +87,21 @@ class CharactersViewModel @Inject constructor(
             setState {
                 copy(
                     charactersModel = data,
+                    pagingComponentModel = pagingComponentModel.copy(
+                        loadingTypes = LoadingTypes.NONE,
+                        listItems = data?.characters
+                    ),
                     loadingTypes = LoadingTypes.NONE,
                 )
             }
         } else if (currentLoading == LoadingTypes.PAGING_PROGRESS) {
             setState {
                 copy(
-                    charactersModel = charactersModel?.copy(
-                        characters = charactersModel.characters?.apply {
+                    pagingComponentModel = pagingComponentModel.copy(
+                        loadingTypes = LoadingTypes.NONE,
+                        listItems = charactersModel?.characters?.apply {
                             addAll(data?.characters ?: arrayListOf())
-                        }
-                    ),
+                        }),
                     loadingTypes = LoadingTypes.NONE,
                     errorModel = null
                 )
@@ -93,7 +115,11 @@ class CharactersViewModel @Inject constructor(
             setState {
                 copy(
                     loadingTypes = LoadingTypes.NONE,
-                    currentPage = page
+                    currentPage = page,
+                    pagingComponentModel = pagingComponentModel.copy(
+                        loadingTypes = LoadingTypes.NONE,
+                        listItems = charactersModel?.characters
+                    )
                 )
             }
             sendSingleUIEvent {
@@ -107,7 +133,11 @@ class CharactersViewModel @Inject constructor(
                 copy(
                     loadingTypes = LoadingTypes.NONE,
                     errorModel = errorModel,
-                    currentPage = page
+                    currentPage = page,
+                    pagingComponentModel = pagingComponentModel.copy(
+                        loadingTypes = LoadingTypes.NONE,
+                        listItems = charactersModel?.characters
+                    )
                 )
             }
     }
