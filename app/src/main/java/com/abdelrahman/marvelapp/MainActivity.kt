@@ -149,22 +149,7 @@ class MainActivity : ComponentActivity() {
                             CharacterDetailsScreen(
                                 modifier = Modifier
                                     .padding(top = innerPadding.calculateTopPadding())
-                                    .background(
-                                        brush = Brush.verticalGradient(
-                                            colors = arrayListOf(
-                                                colorResource(
-                                                    id = com.abdelrahman.shared_domain.R.color.black
-                                                ).copy(alpha = 0.5f), colorResource(
-                                                    id = com.abdelrahman.shared_domain.R.color.darkGrey
-                                                ), colorResource(
-                                                    id = com.abdelrahman.shared_domain.R.color.darkGrey
-                                                ),
-                                                colorResource(
-                                                    id = com.abdelrahman.shared_domain.R.color.black
-                                                )
-                                            )
-                                        )
-                                    )
+
                                     .fillMaxSize(),
                                 characterDetailsData = state.characterDetailsData,
                                 loadingTypes = state.loadingTypes
